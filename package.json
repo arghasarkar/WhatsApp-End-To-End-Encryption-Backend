@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/arghasarkar/WhatsApp-End-To-End-Encryption-Backend/issues"
   },
-  "homepage": "https://github.com/arghasarkar/WhatsApp-End-To-End-Encryption-Backend#readme"
+  "homepage": "https://github.com/arghasarkar/WhatsApp-End-To-End-Encryption-Backend#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "postgresql-orm": "^0.1.8"
+  }
 }
