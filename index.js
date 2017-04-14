@@ -99,10 +99,29 @@ APIRouter.get("/user_id/:user_id", function (req, res, err) {
    });
 });
 
-// // Create a new user
+// Saves an user's public key to the database
 app.post("/api/new_user", function(req, res) {
-    console.log(req.body);
-    res.send(req.body);
+    //console.log(req.body);
+
+    if (req.body !== undefined && req.body !== null) {
+        // Body has content. Go ahead and store it in the database
+        User.create({
+            name: req.body.name,
+            email: req.body.email,
+            public_key: req.body.public_key
+        }).then(function (data) {
+            console.log(data.dataValues);
+            if (data.dataValues !== undefined && data.dataValues !== null) {
+                res.send(data.dataValues);
+            } else {
+                res.status(400);
+                res.send({error: "Key details not saved."});
+            }
+        }).catch((err) => {
+            res.status(400);
+            res.send({error: "Key details not saved."});
+        });
+    }
 });
 
 
