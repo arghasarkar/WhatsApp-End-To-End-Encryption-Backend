@@ -19,5 +19,12 @@
   "bugs": {
     "url": "https://github.com/arghasarkar/WhatsApp-End-To-End-Encryption-Backend/issues"
   },
-  "homepage": "https://github.com/arghasarkar/WhatsApp-End-To-End-Encryption-Backend#readme"
+  "homepage": "https://github.com/arghasarkar/WhatsApp-End-To-End-Encryption-Backend#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "pg": "^6.1.5",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.30.4"
+  }
 }
