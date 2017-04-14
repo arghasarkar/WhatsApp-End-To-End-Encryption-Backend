@@ -1,0 +1,23 @@
+{
+  "name": "whatsapp-end-to-end-encryption-backend-keystore",
+  "version": "1.0.0",
+  "description": "The backend server for the whatsapp end to end encryption project. this will store the public keys of your friends.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arghasarkar/WhatsApp-End-To-End-Encryption-Backend.git"
+  },
+  "keywords": [
+    "Whatsapp",
+    "security"
+  ],
+  "author": "Argha Sarkar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arghasarkar/WhatsApp-End-To-End-Encryption-Backend/issues"
+  },
+  "homepage": "https://github.com/arghasarkar/WhatsApp-End-To-End-Encryption-Backend#readme"
+}
