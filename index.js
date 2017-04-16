@@ -6,74 +6,54 @@ let app = express();
 const PORT    =   process.env.PORT || 8080;
 let APIRouter = express.Router();
 
-let ORM = require('postgresql-orm');
-
-ORM.setup(POSTGRES_CONNECTION_STRING);
-
-
-let userEntityDefinition = {
-    name: 'users', // will match table with name 'users'
-    attributes: {
-        /*id: {
-            type: '	autoincrementing integer',
-            unique: true
-        },*/
-        email: {
-            type: 'character varying',
-        },
-        name: {
-            type: 'character varying'
-        },
-        public_key: {
-            type: 'character varying'
-        }
+let Sequelize = require("sequelize");
+let sequelize = new Sequelize(POSTGRES_CONNECTION_STRING, {
+    dialect: 'postgres',
+    dialectOptions: {
+        ssl: true
     }
-};
+});
 
-let User = ORM.define(userEntityDefinition);
+sequelize
+    .authenticate()
+    .then(function(err) {
+        console.log('Connection has been established successfully.');
+    })
+    .catch(function (err) {
+        console.log('Unable to connect to the database:', err);
+    });
+
+let User = sequelize.define(
+    'user', {
+        name: Sequelize.STRING,
+        email: Sequelize.STRING,
+        public_key: Sequelize.STRING
+    }, {
+        timestamps: false
+    }
+);
+
 /*
-/!*User.dropTable(function(err) {
-    // existing table dropped
+User.findOne({
+    where: {
+        public_key: "ckey"
+    }
+}).then(function (data) {
+   console.log(data.dataValues);
 });
 
-User.createTable(function(err) {
-    // table created
-});*!/
-
-User.save({id: null ,name: 'Jozzzzhna', email:"Johan@johna.com", public_key:"johnapk"}, function(err, savedEntity) {
-    // do something
-    console.log(err);
-    console.log(savedEntity);
+User.create({
+    name: "Test user",
+    email: "Test@gmail.com",
+    public_key: "Test key"
 });
-
-/!*
-User.create({firstName: 'John'}, function(err, createdEntity) {
-    // do smthg
-})
-
-User.update({id: 123, lastName: 'Doe'}, function(err, updatedEntity) {
-    // do smthg
-});
-*!/
- */
-User.load({"id": 3}, function(err, loadedEntity) {
-    console.log(err);
-    // do smthg
-    console.log(loadedEntity);
-});
-
+*/
 
 function loadUserByID(userID) {
-
-    return new Promise(function (resolve, reject) {
-        User.load({id: 6},   function (err, loadedEntity) {
-            if (err === undefined) {
-                console.log(loadedEntity);
-                resolve(loadedEntity);
-            } else {
-                reject(err);
-            }
-        })
+    return User.findOne({
+        where: {
+            id: userID
+        }
     });
 }
 
