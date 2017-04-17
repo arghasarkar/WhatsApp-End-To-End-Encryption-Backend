@@ -35,6 +35,7 @@ sequelize
 let User = sequelize.define(
     'user', {
         name: Sequelize.STRING,
+        phone_number: Sequelize.STRING,
         email: Sequelize.STRING,
         public_key: Sequelize.STRING
     }, {
@@ -42,27 +43,55 @@ let User = sequelize.define(
     }
 );
 
-/*
-User.findOne({
-    where: {
-        public_key: "ckey"
-    }
-}).then(function (data) {
-   console.log(data.dataValues);
-});
-
-User.create({
-    name: "Test user",
-    email: "Test@gmail.com",
-    public_key: "Test key"
-});
-*/
-
+/**
+ * Gets the user's details from the database given the user_id.
+ * @param userID
+ * @returns {Promise}
+ */
 function loadUserByID(userID) {
     return new Promise(function (resolve, reject) {
         User.findOne({
             where: {
                 id: userID
+            }
+        }).then((data) => {
+            if (data === null || data === undefined) {
+                reject({status: 404});
+            }
+            resolve(data);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+}
+
+/**
+ * Get's the user's details from the database given the phone_number.
+ * @param phoneNumber
+ * @returns {Promise}
+ */
+function loadUserByPhoneNumber(phoneNumber) {
+    return new Promise(function (resolve, reject) {
+        User.findOne({
+            where: {
+                phone_number: phoneNumber
+            }
+        }).then((data) => {
+            if (data === null || data === undefined) {
+                reject({status: 404});
+            }
+            resolve(data);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+}
+
+function loadUsersByName(name) {
+    return new Promise(function (resolve, reject) {
+        User.findAll({
+            where: {
+                name: name
             }
         }).then((data) => {
             if (data === null || data === undefined) {
@@ -99,18 +128,48 @@ APIRouter.get("/user_id/:user_id", function (req, res, err) {
    });
 });
 
+// Get an user by phone number
+APIRouter.get("/phone_number/:phone_number", function (req, res, err) {
+    let phoneNumber = req.params.phone_number;
+    loadUserByPhoneNumber(phoneNumber).then(function (userData) {
+        res.send(userData);
+    }).catch(function (err) {
+        if (err.status) {
+            res.status(err.status);
+            res.send({error: "User not found."});
+        } else {
+            res.status(400);
+            res.send({error: "Some error has occurred."});
+        }
+    });
+});
+
+APIRouter.get("/name/:name", function (req, res, err) {
+    let name = req.params.name;
+    loadUsersByName(name).then(function (userData) {
+        res.send(userData);
+    }).catch(function (err) {
+        if (err.status) {
+            res.status(err.status);
+            res.send({error: "User not found."});
+        } else {
+            res.status(400);
+            res.send({error: "Some error has occurred."});
+        }
+    });
+});
+
 // Saves an user's public key to the database
 app.post("/api/new_user", function(req, res) {
-    //console.log(req.body);
 
     if (req.body !== undefined && req.body !== null) {
         // Body has content. Go ahead and store it in the database
         User.create({
             name: req.body.name,
+            phone_number: req.body.phone_number,
             email: req.body.email,
             public_key: req.body.public_key
         }).then(function (data) {
-            console.log(data.dataValues);
             if (data.dataValues !== undefined && data.dataValues !== null) {
                 res.send(data.dataValues);
             } else {
@@ -122,6 +181,7 @@ app.post("/api/new_user", function(req, res) {
             res.send({error: "Key details not saved."});
         });
     }
+
 });
 
 
