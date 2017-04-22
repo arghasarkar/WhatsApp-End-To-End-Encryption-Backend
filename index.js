@@ -174,11 +174,11 @@ app.post("/api/new_user", function(req, res) {
                 res.send(data.dataValues);
             } else {
                 res.status(400);
-                res.send({error: "Key details not saved."});
+                res.send({error: "Key details not saved. 1"});
             }
         }).catch((err) => {
             res.status(400);
-            res.send({error: "Key details not saved."});
+            res.send({error: "Key details not saved. 2"});
         });
     }
 
